@@ -43,12 +43,18 @@ class AETransform(TransformerMixin, BaseEstimator):
         decoded = Dense(ncol, activation='sigmoid')(x)
 
         encoder = Model(inputs=input_dim, outputs=encoded, name='encoder')
-        # decoder = Model(inputs=encoding_dim, outputs=decoded, name='decoder')
         self.encoder = encoder
-        # self.decoder = decoder
+
         self.autoencoder = Model(inputs=input_dim, outputs=decoded)
+        # Possible way:
         # self.autoencoder = Model(inputs=input_dim,
         #                          outputs=decoder(encoder(input_dim)))
+
+        deco = self.autoencoder.layers[-3](encoding_dim)
+        deco = self.autoencoder.layers[-2](deco)
+        deco = self.autoencoder.layers[-1](deco)
+        decoder = Model(inputs=encoding_dim, outputs=deco, name='decoder')
+        self.decoder = decoder
 
         self.autoencoder.compile(optimizer='adam', loss=self.loss)
         history = self.autoencoder.fit(X, X, shuffle=True, verbose=2,
