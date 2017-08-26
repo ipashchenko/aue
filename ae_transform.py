@@ -1,5 +1,6 @@
 from keras.layers import Input, Dense
 from keras.models import Model
+from sklearn.utils.validation import check_is_fitted
 from sklearn.base import TransformerMixin, BaseEstimator
 import matplotlib.pyplot as plt
 from keras.callbacks import ModelCheckpoint, TensorBoard
@@ -84,27 +85,18 @@ class AETransform(TransformerMixin, BaseEstimator):
         return self
 
     def summary(self):
-        try:
-            getattr(self, "autoencoder_")
-        except AttributeError:
-            raise RuntimeError("You must train transformer before calling summary!")
+        check_is_fitted(self, ['autoencoder_'])
         return self.autoencoder_.summary()
 
     def transform(self, X, **transform_params):
-        try:
-            getattr(self, "autoencoder_")
-        except AttributeError:
-            raise RuntimeError("You must train transformer before transforming!")
+        check_is_fitted(self, ['autoencoder_'])
         return self.autoencoder_.predict(X)
 
     def fit_transform(self, X, y=None, **fit_params):
         return self.fit(X, **fit_params).transform(X)
 
     def plot_history(self, save_file=None):
-        try:
-            getattr(self, "autoencoder_")
-        except AttributeError:
-            raise RuntimeError("You must train transformer before plotting!")
+        check_is_fitted(self, ['autoencoder_'])
         fig, axes = plt.subplots(1, 1)
         axes.plot(self.history_['loss'])
         axes.plot(self.history_['val_loss'])
