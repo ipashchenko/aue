@@ -8,6 +8,22 @@ from ae_transform import AETransform
 import matplotlib.pyplot as plt
 
 
+# for name in list(df_vars.columns):
+#     if not name.startswith("value"):
+#         df_vars.drop(name, axis=1, inplace=True)
+# for name in list(df_vars.columns):
+#     if "large_number_of_peaks" in name:
+#         df_vars.drop(name, axis=1, inplace=True)
+# for name in list(df_vars.columns):
+#     if "mean_abs_change_quantiles" in name:
+#         df_vars.drop(name, axis=1, inplace=True)
+# for name in list(df_vars.columns):
+#     if "mean_autocorrelatio" in name:
+#         df_vars.drop(name, axis=1, inplace=True)
+# from tsfresh.feature_extraction.settings import from_columns
+# recovered_settings = from_columns(df_vars)
+
+
 target = 'variable'
 data_dir = '/home/ilya/github/ogle'
 df_vars = pd.read_pickle(os.path.join(data_dir, "features_vars.pkl"))
@@ -109,4 +125,5 @@ plt.yticks(np.arange(0, 1.1, 0.2), np.arange(0, 1.1, 0.2), fontsize=14)
 plt.xlim(-7, -2)
 plt.xlabel(r"$\log(MSE)$ of AE reconstruction", fontsize=14)
 plt.legend(loc='upper left', fontsize=14)
+plt.show()
 plt.savefig("NB_GKD.png", dpi=300)
